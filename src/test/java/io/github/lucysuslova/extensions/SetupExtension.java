@@ -7,7 +7,6 @@ import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
-import static com.codeborne.selenide.Selenide.clearBrowserCookies;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 public class SetupExtension implements BeforeEachCallback, AfterEachCallback {
@@ -15,7 +14,6 @@ public class SetupExtension implements BeforeEachCallback, AfterEachCallback {
     public void beforeEach(ExtensionContext context) throws Exception {
         Configuration.browser = "chrome";
         SelenideLogger.addListener("AllureSelenide", new AllureSelenide().savePageSource(false).screenshots(true));
-        clearBrowserCookies();
     }
 
     @Override

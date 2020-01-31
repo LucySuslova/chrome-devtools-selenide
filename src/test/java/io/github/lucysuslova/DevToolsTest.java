@@ -20,14 +20,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.openqa.selenium.devtools.network.Network.emulateNetworkConditions;
 
 @ExtendWith(SetupExtension.class)
-public class DevToolsImdbTest {
+public class DevToolsTest {
 
     private DevTools chromeDevTools;
-    private final String url = "https://www.imdb.com/";
+    private final String imdbUrl = "https://www.imdb.com/";
 
     @BeforeEach
     public void setup() {
-        open(url);
+        open(imdbUrl);
         ChromeDriver driver = (ChromeDriver) getWebDriver();
         chromeDevTools = driver.getDevTools();
         chromeDevTools.createSession();
@@ -38,7 +38,7 @@ public class DevToolsImdbTest {
         chromeDevTools.send(Network.enable(Optional.empty(), Optional.empty(), Optional.empty()));
         chromeDevTools.send(
                 emulateNetworkConditions(true, 0, 0, 0, Optional.empty()));
-        open(url);
+        open(imdbUrl);
         $(".error-code").shouldHave(Condition.text("ERR_INTERNET_DISCONNECTED"));
     }
 
@@ -47,7 +47,7 @@ public class DevToolsImdbTest {
         String mAgent = "Mozilla/5.0 (Linux; Android 8.0; Pixel 2 Build/OPD3.170816.012) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.117 Mobile Safari/537.36";
         chromeDevTools.send(Network.enable(Optional.empty(), Optional.empty(), Optional.empty()));
         chromeDevTools.send(Network.setUserAgentOverride(mAgent, Optional.empty(), Optional.empty()));
-        open(url);
+        open(imdbUrl);
         assertEquals("https://m.imdb.com/", getWebDriver().getCurrentUrl(), "Opened imdb version is not mobile");
     }
 
@@ -59,7 +59,7 @@ public class DevToolsImdbTest {
         chromeDevTools.addListener(Network.requestWillBeSent(), requestWillBeSent ->
                 assertEquals(requestWillBeSent.getRequest().getHeaders().get("testCustomHeader"),
                         "testCustomHeaderValue"));
-        open(url);
+        open(imdbUrl);
     }
 
     @Test
@@ -68,7 +68,7 @@ public class DevToolsImdbTest {
         chromeDevTools.send(Log.enable());
         chromeDevTools.addListener(Log.entryAdded(), consoleMessageFromDevTools ->
                 assertEquals(consoleMessageFromDevTools.getText(), message));
-        open(url);
+        open(imdbUrl);
         executeJavaScript("console.log('" + message + "');");
     }
 
